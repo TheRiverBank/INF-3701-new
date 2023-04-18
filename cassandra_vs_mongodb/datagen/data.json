@@ -1,0 +1,37 @@
+[
+    {
+        "id": "123"
+        ""
+    }
+]
+
+
+[
+    {
+    "id": "1",
+    "matchid": "1",
+    "players": [
+        {
+            "id": "1",
+            "name": "ItsFootball"
+        },
+        {
+            "id": "2",
+            "name": "ItsSoccer"
+        }
+    ],
+    "startdate": "2021",
+    "gamesplayed": [
+        {
+            "gameId": 1,
+            "score": {
+                "ItsFootball": 1
+            }
+        }
+    ]
+},
+{
+
+}
+
+]

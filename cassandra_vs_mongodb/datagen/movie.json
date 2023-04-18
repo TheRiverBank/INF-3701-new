@@ -1,0 +1,109 @@
+[
+    {
+        "movieId": 49885356996,
+        "movieName": "Savannah Fisher",
+        "director": "James Garcia",
+        "writer": "Claudia Rodriguez",
+        "genre": "Action",
+        "runtime": 159,
+        "cast": [
+            {
+                "castId": 80671501726,
+                "screenName": "Kim Vasquez",
+                "name": "Justin Johnson",
+                "payment": 13445,
+                "relatedMovies": [
+                    "Shannon Perry",
+                    "Anna York",
+                    "Trevor Odonnell",
+                    "Tracy Gutierrez"
+                ]
+            },
+            {
+                "castId": 44588717055,
+                "screenName": "Erin Smith",
+                "name": "Paul Nelson",
+                "payment": 52978,
+                "relatedMovies": [
+                    "Timothy Barrera",
+                    "Amy Arnold",
+                    "David Marshall"
+                ]
+            },
+            {
+                "castId": 31152155259,
+                "screenName": "Monica Villegas",
+                "name": "Emma Valentine",
+                "payment": 96023,
+                "relatedMovies": [
+                    "Christopher Gutierrez",
+                    "Heather Fisher",
+                    "Lindsey Fleming",
+                    "Luis Bautista"
+                ]
+            },
+            {
+                "castId": 32664180295,
+                "screenName": "Joshua Zamora",
+                "name": "Michael Brown",
+                "payment": 14341,
+                "relatedMovies": [
+                    "Tara Hensley",
+                    "Kristen Wade",
+                    "Craig Wilson"
+                ]
+            }
+        ]
+    },
+    {
+        "movieId": 21082493171,
+        "movieName": "David Bennett",
+        "director": "Cheyenne Hudson",
+        "writer": "Mark Johnson",
+        "genre": "Action",
+        "runtime": 94,
+        "cast": [
+            {
+                "castId": 67758197217,
+                "screenName": "Edward Smith",
+                "name": "Trevor Powell",
+                "payment": 89982,
+                "relatedMovies": [
+                    "James Avery"
+                ]
+            },
+            {
+                "castId": 30129788906,
+                "screenName": "Brent Edwards",
+                "name": "Jeanne Davis",
+                "payment": 42013,
+                "relatedMovies": [
+                    "Deanna Gonzalez",
+                    "Christian Wilson"
+                ]
+            },
+            {
+                "castId": 50711871249,
+                "screenName": "Thomas Kim",
+                "name": "Jasmine Hahn",
+                "payment": 29182,
+                "relatedMovies": [
+                    "Suzanne Schroeder",
+                    "Alison Horne",
+                    "Scott Wilson",
+                    "Mike Trevino MD",
+                    "Scott Wong"
+                ]
+            },
+            {
+                "castId": 10459531206,
+                "screenName": "Jennifer Robbins",
+                "name": "Desiree Cordova",
+                "payment": 26690,
+                "relatedMovies": [
+                    "James Sanders"
+                ]
+            }
+        ]
+    }
+]

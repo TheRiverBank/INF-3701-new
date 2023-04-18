@@ -1,0 +1,29 @@
+2023-03-14 11:06:13 INFO  Operation directory: /home/sondre/UIT/INF-3701/cassandra_vs_mongodb/logs/LOAD_20230314-110612-960258
+2023-03-14 11:06:23 WARN  [driver] Error connecting to Node(endPoint=/127.0.0.1:9042, hostId=null, hashCode=5838b10c), trying next node (ConnectionInitException: [driver|control|connecting...] Protocol initialization request, step 1 (OPTIONS): failed to send request (io.netty.channel.StacklessClosedChannelException))
+2023-03-14 11:06:31 ERROR Operation LOAD_20230314-110612-960258 failed: Could not reach any contact point, make sure you've provided valid addresses (showing first 1 nodes, use getAllErrors() for more): Node(endPoint=/127.0.0.1:9042, hostId=null, hashCode=5838b10c): [com.datastax.oss.driver.api.core.connection.ConnectionInitException: [driver|control|connecting...] Protocol initialization request, step 1 (OPTIONS): failed to send request (io.netty.channel.StacklessClosedChannelException)].
+   Suppressed: [driver|control|connecting...] Protocol initialization request, step 1 (OPTIONS): failed to send request (io.netty.channel.StacklessClosedChannelException).
+     Suppressed: Connection refused: /127.0.0.1:9042.
+       Caused by: Connection refused.
+     Caused by: Channel is closed.
+com.datastax.oss.driver.api.core.AllNodesFailedException: Could not reach any contact point, make sure you've provided valid addresses (showing first 1 nodes, use getAllErrors() for more): Node(endPoint=/127.0.0.1:9042, hostId=null, hashCode=5838b10c): [com.datastax.oss.driver.api.core.connection.ConnectionInitException: [driver|control|connecting...] Protocol initialization request, step 1 (OPTIONS): failed to send request (io.netty.channel.StacklessClosedChannelException)]
+	at com.datastax.oss.driver.api.core.AllNodesFailedException.copy(AllNodesFailedException.java:141)
+	at com.datastax.oss.driver.internal.core.util.concurrent.CompletableFutures.getUninterruptibly(CompletableFutures.java:149)
+	at com.datastax.oss.driver.api.core.session.SessionBuilder.build(SessionBuilder.java:835)
+	at com.datastax.oss.dsbulk.workflow.commons.settings.DriverSettings.newSession(DriverSettings.java:560)
+	at com.datastax.oss.dsbulk.workflow.load.LoadWorkflow.init(LoadWorkflow.java:145)
+	at com.datastax.oss.dsbulk.runner.WorkflowThread.run(WorkflowThread.java:52)
+	Suppressed: com.datastax.oss.driver.api.core.connection.ConnectionInitException: [driver|control|connecting...] Protocol initialization request, step 1 (OPTIONS): failed to send request (io.netty.channel.StacklessClosedChannelException)
+		at com.datastax.oss.driver.internal.core.channel.ProtocolInitHandler$InitRequest.fail(ProtocolInitHandler.java:356)
+		at com.datastax.oss.driver.internal.core.channel.ChannelHandlerRequest.writeListener(ChannelHandlerRequest.java:87)
+		at com.datastax.oss.driver.internal.core.channel.ChannelHandlerRequest.send(ChannelHandlerRequest.java:76) [6 skipped]
+		at com.datastax.oss.driver.internal.core.channel.ProtocolInitHandler$InitRequest.send(ProtocolInitHandler.java:193)
+		at com.datastax.oss.driver.internal.core.channel.ProtocolInitHandler.onRealConnect(ProtocolInitHandler.java:124)
+		at com.datastax.oss.driver.internal.core.channel.ConnectInitHandler.lambda$connect$0(ConnectInitHandler.java:57)
+		at java.base/java.lang.Thread.run(Thread.java:829) [16 skipped]
+		Suppressed: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /127.0.0.1:9042
+		Caused by: java.net.ConnectException: Connection refused
+			at java.base/sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+			at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:777)
+			at java.base/java.lang.Thread.run(Thread.java:829) [9 skipped]
+	Caused by: io.netty.channel.StacklessClosedChannelException: null
+ [1 skipped]
