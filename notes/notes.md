@@ -392,8 +392,56 @@ An update is sent to the master node which propagates the update to the other re
 To deliver messages in asynch replication, persistant messaging or pub-sub systems can be used. 
 
 
+# 8. Complex Data Types
+Relational models want atomic data values and shuns multivalued or composite values for simplicity. This can also lead to more problems than it solves. This chapter looks at non-atomic data types.
+## Semi-structured Data
+### Overview of Semi-structured Data
+#### Flexible Schema
+Want to dynamically add attributes as needed. One option is **wide column** data representation which allows each tuple to have a different set of attributes. Another is the **sparse column** representation where there might be a huge set of attributes for each tuple but only some of them are used by each tuple. 
+#### Multivalued Data Types
+Attribute stores sets, mutlisets, arrays or key-value maps.
+#### Nested Data Types
+Nested data in the form that for example a name is built of a first name and a last name. There are databases that are able to store such object-oriented data. This could be JSON or XML.
+#### Knowledge Representation
+Resource Description Format to store large amounts of facts for example in a graph where relationships are modelled as edges. 
 
+### JSON
+Key-value representation. Used for many things on the web like transfering information to/from the fronend from/to the backend. Takes up more space and is more CPU heavy than flat represenataion. SQL now supports JSON. 
+### XML
+Uses tags <> in a nested structure. Is said to be self-documenting. SQL has support for XML. 
+### Resource Description Format (RDF)
+#### Triple Representation
+Either:
+1. (ID, attribute-name, value) or
+2. (ID1, relationship-name, ID2)
+So a tuple could be (ID123, name, "jhon") or (ID123, instance-of, student). RDF is thus inly able to save binary relationships.
+#### Graph Representation 
+Is known as a **Knowledge graph** where enteties and attribute values are nodes and the attribute names and relationhips are the edges. Used to store such things as facts. 
 
+## Object Orientation
+**Object-relational data model** extends the relational model to provide complex data types and object orientation. SQL attempts to keep the relational foundataions while extending the modeling power. For programmers in OOP languages, having to remodel their data in order to store obejcts is cumbersome and therefore it is easier to have a database that is able to store the objects directly. This can be done in several ways, one of which is that the database can support automatic deconstruction on a store and automatic reconstruction on a load. Ot the database could natively be comliant with the object that is to be stored. The next two sections describe two approaches.
+### Object-Relational Database Systems
+How objects can be stored in a relational system.
+#### User-Defined Types
+SQL extension that lets user define new data types. These types can also be inherited and extended on to create sub types of the parent type with extra attributes. It is also possible to inherit entire tables where ex. students and teachers tables could be chidren of the peoples table. Any tuple in the students or teachers table is then also present in the people table. 
+### ORM
+Object relational model used to enable queries in a programming language rather than having to learn some other query language.
+
+## Textual Data
+Unstructured text. **Information retreival** is the process of querying unstructured textual data. Textual data is organized into *documents*. In a database, a text valued attribute can be said to be a document, while on the web, each web page is a document. 
+### Keyword Queries
+Use of keywords where the information retreival system finds all documents mathing the keywords and can also possibly rank the found documents by relevance. This is what search engines do. 
+### Relevance Ranking
+Ransking documents based on relevance.
+#### TF-IDF
+**Term** is a keyword occuring in a document. Relevance can be calculated using **term frequency**: $$TF(d, t)=log\left(1+{n(d, t) \over n(d)}\right)$$ where $n(d)$ is the number of keyword occurances and $n(d, t)$ is the number of occurances of keyword t. This equation takes into account the number length of the document. This equation can be refined to take in to account wehter or not the term occurs in the for example the title which could count positively to a higher rank. If the query has mutiple key words, **inverse document frequency** is used to rank the term based of how many times it occurs. A "rarer" word should be emphasised more: $$IDF = {1 \over n(t)}$$ 
+the **TF-IDF** is then:
+$$r(d, Q)=\sum_{t \in Q}TF(d, t) * IDF(t)$$
+Another positive contribution to the ranking is close proximity to the keywords in the document. 
+#### Ranking Using Hyperlinks
+Independant of the keyword occurances, the hyperlink count between documents can be used to rank documents. A method of doing this is **PageRank**. PageRank is based on the analogy of the probability of a random walker ending up on a certain webpage. It will also include some random teleporting to visit those pages with no inbound links. PageRank is used togheter with TF-IDF to rank webpages. 
+### Measuring effectiveness of retrieval
+**Precission** measures the percentage of retreived documents that are relevant while **recall** measures what percentage of the relevant documents are actually retreived.  
 
 
 
