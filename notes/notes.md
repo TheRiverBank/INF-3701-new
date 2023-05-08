@@ -444,6 +444,47 @@ Independant of the keyword occurances, the hyperlink count between documents can
 **Precission** measures the percentage of retreived documents that are relevant while **recall** measures what percentage of the relevant documents are actually retreived.  
 
 
+# 31. Information Retreival
+Much broader than data in a relational databse. Also includes what information to display gien a keyword query, analysis, indexing and classification. 
+
+The difference between an information retreival system and a regular database:
+* Database systems deal with structured data that supports a range of operations to retreive this data and update it. Information retreival systems deal with much simpler primitives and use unstructured documents.
+* Information retreival systems solves some problems not solved in regular databases like ranking the relevance of documents in a query and using keyword queries in general. 
+Today, an information retrevial system will not only retreive the relenvat documentes but will also try to extract the semantics of the query to show related information like news or current events. 
+
+## Relevance Ranking Using Terms
+### Similarity-Based Retreival
+User can ask the information retrevial system to find all documents who are similar to some document A. One way this can be done is to rank the most relevant words in document A using TF-IDF and then use the most relevant ones as keywords in a query to find similar documents. Can instead uses **cosine similarity** which takes all terms T that are common in both documents, and applies the cosine similarity:
+$${\sum_{i=1}^nr(d, t_i)r(e,t_i) \over \sqrt{\sum_{i=1}^nr(d, t_i)^2} \sqrt{\sum_{i=1}^nr(e, t_i)^2}}$$
+where 
+$$r(d, t)=TF(d, t)*IDF(t)$$
+
+## Relevance Using Hyperlinks
+**PageRank**
+
+## Synonyms, Homonyms, and Ontologies
+* **Synonyms**: Since words can have many synonyms, a user would want to retreive pages that might not match exactly the keywords used but also the synoyms. The information retreival system may then simply inject an "or" for each synonym for the keywords.
+* **Homonyms**: Words can have several meanings which can have serious implications also when injecting the synonyms into the query, as the synonymes themselves can be homonyms. To handle this, the system must try to indetify the semantics of the query. **Concept-based querying** attempts to handle this by analyzing the document to evaluate the surrounding words. Concepts can however be problematic as for example a query for animals includes mammals, but replacing the query with mammals is not desired. To handle this, a hierearchy can be creates on concepts.
+* **Ontologies**: Hierarchical structure that reflects relationships between concepts using "is-a" and "part-of" relationships. Big databases of relationships are made which improves query capabilities.
+
+## Indexing of Documents
+**Inverted index** maps keywords to a list of documents that contain the keyword. To improve retreival of such lists, they are preferably stored as consecutive disk pages. A B+-tree index can be used for this. 
+
+## Measuring Retreival Effectiveness
+**Recall** and **relevance**
+
+## Crawling and Indexing the web
+Web crawling is the act of recursively following hyperlinks to gather information on the web. 
+
+## Information Retreival: Beyond Ranking of Pages
+
+
+
+
+
+
+
+
 
 
 
@@ -479,9 +520,11 @@ Independant of the keyword occurances, the hyperlink count between documents can
 
 # Principles of Distributed Database Systems.
 # Chapter 7.
+**Interoperability**: functionallity of inmorfation systems to exchange data and share that data. 
+
+
 ## Database Integration
-* **Physical integration**, source databases are *materialized* by integrating them into 
-*data warehouses*. These are used in *Online Analytical Processing (OLAP)* to process data from multiple sources. 
+* **Physical integration**, source databases are *materialized* by integrating them into *data warehouses*. These are used in *Online Analytical Processing (OLAP)* to process data from multiple sources. 
 * **Logical integration**, the global conceptual scheam is entierly virtual and not materialized. The data is then not physically put into one database, but mediators and wrappers are used to access the different databases. There are different ways to create a Global Conceptual View (GCS) such that to the user, the databases seems to be one logical database, given that each database has its own local conceptual schema. These systems are typically read-only because of the hertrogenity of the systems. 
 ### Bottom-Up Design Methodology
 Physically or logically integrating databases to form a single cohesive global database. Requires that the GCS is defined and each LCS must be mapped to the GCS. There are two ways of creating a GCS:
@@ -604,4 +647,63 @@ Have a wrapper for each local DBMS that includes information on the schema, data
 
 
 # Next Generation Databases
-## 3. NoSQL
+# 1. Next gen databases
+## NewSQL
+Databases that retain key characteristics of the RDMBS model but changes up the model from traditional RDBMS by inlducing some NoSQL aspects such as wide column. 
+## The eras of database systems
+![](3phases.PNG)
+# 3. Sharding, Amazon, and the Birth of NoSQL
+## Sharding
+Problems
+* **Application complecity**: SQL requests must be routed to the correct shard using a dynamic routing layer that must be implemented.
+* **Crippeled SQL**: No queries that opperates across shards.
+* **Loss of transactional integrity**: ACID is not practical. 2PC posisble but can create a botlenecks and problems with conflict resolution.
+* **Operational complexity**: Load balancing. 
+One solution is Oravles RAC which is a distributed system that uses shared disk.
+
+# 5. In-Memory Databases
+Ensure that data is not lost by:
+* Replicating dta to other members of a cluster
+* Writing complete database images
+* Writing out transaction/opertaion records to an append-only disk file
+Is not ACID compliant as a node might fail before writing an operation to the log in persistant storage. It may be possible for users in some system to specify that operations be written to the log before it is carried out which is ACID compliant but sacrifices some speed. 
+
+## Reids and TimesTen
+Redis is an in-memory key-value store that keeps the keys and values in memory but may swap older keys to disk when needed. On the other hand, TimesTen is a more traditinal relational datbase that is in memory. They both use append only log files with dedicated storage for snapshots. They may be configures to write operations to disk log before execution for fault tolerance. Redis works well for applications where the data fits in memory but has overhead when is has to swap out keys
+
+## SAP HANA
+* Designed for Business Intelligence and OLTP workloads.
+* Relational model that combines in-memory with columnar storage option. Usually configured as columnar for BI and row oriented for OLTP. 
+* Row store is guaranteed to be in memory while col is by default loaded on demand. 
+* Uses snapshots.
+* ACID by waiting for transaction commits. 
+
+## VoltDB
+* Aspires to be completely in-memory. 
+* Supports ACID transaction but instead of writing to disk, persistance is doen thorugh replication to multiple machines. 
+* Defines a *K-safety level* that specifies how many machines a data item must be replicated to before the transaction is sucesfully comitted. 
+* Each partition is not only distributed across machines but also within a single machine.
+    * Each CPU is single thread dedicated to each partition. This takes away the need for locking. 
+
+## Oracle 12c
+* Implementes a supplementary in-memory column store to its on disk row store.
+
+## Spark
+* The in-memory answer to Hadoop MapReduce.
+* Hadoop MapReduce was not fast enough when only on disk. 
+* Fault-tolerand and sitributed processing framework that excels at machine learning workloads. 
+* Data represented as resilient distributed datasets (RDD). 
+    * Collections of objects that can be partitioned across multiple nodes of the cluster. 
+    * Immutable. Operations create new RDDs instead of modofying existing ones. 
+    * Uses a DAG to implemend methods on the RDDs.
+    * RDDs can be created from many sources like from a relational table of a csv document. The two can then be joined to create a new RDD, this can then be operated on which creates a new RDD as well.
+
+# 8. Distributed Database Patterns
+* Shared-nothing
+    * Must implement consensus protocol like 2PC to assure that transactions are executed by all nodes in the cluster
+        * This is really hard and the nodes might arrive at an uncertain state.
+    * Drawback of possibly having unbalanced workloads.
+    * Easy to scale
+    * Economically viable
+    * A node failure renders that part of the database unavailable (replication?). 
+* Shared disk
