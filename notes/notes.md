@@ -707,3 +707,108 @@ Redis is an in-memory key-value store that keeps the keys and values in memory b
     * Economically viable
     * A node failure renders that part of the database unavailable (replication?). 
 * Shared disk
+    * Greater and more eleastic scaling. 
+    * Other nodes can take over when a node fails. 
+    * Cached data needs to be coordinated across nodes which is hard.
+    * Real Application Clusters RAC from Oracle is the only surviving shared disk database. 
+
+## Sharding in MongoDB
+* Uses a router that contacts a config server to find which shard a data item is located at
+* The router then retreives the data item from the correct shard and sends it back to the router then to the user.
+* A mongo collection is shared on a shard key. 
+* Shard keys are autimatically balanced for equal distribution at the nodes. 
+* MongoDB uses a master-slave architecture
+    * Only the master can accept write requests
+    * Writes are eventually propogated to slaves
+    * Master keeps track of changes in an *oplog* and will attempt to apply theese changles to the slaves
+    * Master will give up its role if it is unable to contact a majority of nodes
+    * A new election then statrts
+* Some tunable consistency and availability
+    * Usually a write is completed when master has received it
+        * Master might fail
+    * Client can also set that it should be replicated a certain amount of times before continuing
+    * Reads are usually sent to master but can be sent to one of the slaves too.
+
+## Omnicent master in HBase
+* HBase is a database that can be placed typically on a distributed file system
+    * In most cases on top of HDFS
+    * HDFS handles write mirrorin and disk failures
+* Sort of shared disk since the underlying filestystem has a unified view
+    * The filesystem is distributed however
+* HBase uses a *regionServer* to handle read/writes to that region
+    * Often colocated with the HDFS datanode in that region
+* Uses a write ahead log to journal all writes
+    * Implemented using a log-structured merge tree
+
+## Consistent hashing in Cassandra
+* No single master
+    * Has a coordinator however
+* New nodes might become seed nodes 
+* Since no master, uses gossiping to dissimintate infomraiton
+* Uses consistent hashing 
+    * Can create data skew
+    * Solved by virtual nodes
+        * Also helps when system is hetrogeneous to place more data on more performant nodes
+* Node which data item is hashed to is coordinator
+    * Is responsible for replicating data item
+    * Replifaction factor RF
+    * Rack-aware and datacenter-aware
+
+# 9. Consistency Models
+* ACID usually to restrictive
+* Instead use *multi-version concurrency control (MVCC)*
+    * Data it timestamped or has change indentifiers
+    * Can then have snapshot of database
+    * Other instances of the database do not see the transaction until it is commited 
+    * This prevents the system from needing to lock
+* *System sequence number* or *transaction sequence number* 
+    * Used to determine which version of data should be visible to specific queries. 
+* Different levels:
+    * **Strict consistency**: Read will always return most recent data value
+    * **Casual**: May no tread the latest value but if updates A, B then C occurs, a user will never see C without being able to see B.
+    * **Monotinic**: Session will never see reverted data to an eralier point
+    * **Read you own writes**: At least you see your own writes
+    * **Eventual**:  At some point consistent
+    * **Weak**: No consistent guarantee, may forever be unconsistent
+
+# 10. Data Models and Storage
+## Convergent Replicated Data Types
+* Data types where version conflicts can be automatically handled by the system. 
+* *Riak* is a Dynamo based system that uses CRDTs.
+    * When a CRDT value is propagated between nodes, the hirstory of operations is passed as well
+    * This history will determine which version is the correct one. 
+    * Several differnet CRDT strategies
+        * G-counter
+        * LWW-set
+
+Image of g-counter where node 1 and 3 are incrementing some value and sending the status to node 2. Node 2 must then find the correct value by merging the increments from the two nodes and then sends them the correct sequence of events.       
+![G-counter](g-counter.PNG)
+## BigTable
+* Column families
+* Wide columns where rows dont ahve the same columns
+    * Sparse columns do not take up space
+## Storage
+* Starting to shift away from B-tree
+    * B-tree, good for random access
+    * log-structured merge tree, optimized for sequential write performance
+### B-tree
+* B-tree is a tree structure where nodes can have mutiple values and where values lower than the current node are split to the left and higher values are split to the right
+* Leaf nodes hold a pointer to the block on disk as well as pointer to the next sequential values as well as to the previous block.
+* Is expensive to maintain when data is changing rapidly
+### Log-structured Merge Trees
+* Wants to optimize storage and support extremely high insert rates, while supporting efficient random read access
+* Has two indexed trees:
+    * **In-memroy tree** or *MemTable* which reveives all new record inserts
+    * **On-disk trees** which are copies of in-memory trees that have been flushed to disk. *SSTable* in Cassandra.
+* Uses a sort of write ahead log for fault tolerance
+* The MemTables are flushed to disk when to big.
+* The SSTables are also merged into a more compact structure after a while
+    * They initially keep the SSTables more like the MemTable before merging to compact strucutre (compaction). Probably for faster recovery
+* Each SSTable has a index file
+    * May have many index file sso Bloom filters are used for faster search
+        * The filter says that some index file *may* contain the key you are looking for
+        * So false positives but no false negativese
+* The SSTables are immutable
+    * This means that a line of versions for each update on an item is maintained
+    * Deletions are done using tombstones where deleted rows are marked and evetually deleted in the SSTable during compaction
+
