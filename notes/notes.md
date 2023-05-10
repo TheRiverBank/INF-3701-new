@@ -306,6 +306,8 @@ Additional faiulures in a distributed environment:
 * Comm link failure
 * Netowrk partition
 
+
+
 ## Commit Protocols
 The transaction coordinator must make sure that either all nodes execute the transaction successfully, or the transaction is not executed at all.
 ### Two-phase Commit (2PC)
